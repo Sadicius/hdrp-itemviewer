@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Viewer Mejorado</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <div class="book-container" style="display:none;">
+        <div class="header">
+          <h1>Visor de Ítems</h1>
+          <button id="closeBtn" title="Cerrar">✖</button>
+        </div>
+
+        <div class="controls">
+          <input type="text" id="searchInput" placeholder="Buscar ítems..." />
+          <select id="typeFilter"><option value="all">Todos los tipos</option></select>
+          <label for="imgSizeRange"></label>
+          <input type="range" id="imgSizeRange" min="100" max="200" value="100" step="10" />
+          <span id="imgSizeLabel"></span>
+        </div>
+
+        <div id="itemsGrid" class="items-grid"></div>
+      </div>
+    </main>
+  </body>
+</html>
