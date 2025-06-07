@@ -1,5 +1,5 @@
 ## HDRP-ItemViewer
-HDRP-ItemViewer is a visual tool for Unity (compatible with High Definition Render Pipeline - HDRP) that allows players to explore and query all available items on the game server. Additionally, if the user has administrator permissions, they can use the tool to issue items directly to other players.
+HDRP-ItemViewer is a visual tool that allows players to explore and query all available items on the game server. Additionally, if the user has administrator permissions, they can use the tool to issue items directly to other players.
 
 # Features
 🔍 Item View: Browse and search for available items on the server with a clear and organized interface.
