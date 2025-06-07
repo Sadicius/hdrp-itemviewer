@@ -17,6 +17,7 @@ rsg-core
 ox_lib
 
 Connection to the server hosting the item data
+![image](https://github.com/user-attachments/assets/20637226-8bd9-4b53-a717-5d5e08b68b7b)
 
 Make sure you have HDRP configured correctly in your project.
 
