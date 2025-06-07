@@ -3,13 +3,7 @@ HDRP-ItemViewer is a visual tool that allows players to explore and query all av
 
 # Features
 🔍 Item View: Browse and search for available items on the server with a clear and organized interface.
-
 📦 Full Details: View detailed information about each item (name, description, ID, category, etc.).
-
-🎮 Item Delivery: Administrators can select an item and assign it to a player directly from the tool.
-
-🔐 Access Control: Delivery functionality is only enabled for users with administrator permissions.
-
 💡 HDRP Integration: Designed to work with projects that use HDRP, offering a modern and fluid visual experience.
 
 # Requirements
