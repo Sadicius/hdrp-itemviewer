@@ -36,33 +36,35 @@ function filterItems() {
   renderItems();
 }
 
+const failedImages = new Set(); // Para registrar qué URLs ya fallaron
+
 function renderItems() {
   itemsGrid.innerHTML = '';
 
   const containerWidth = itemsGrid.clientWidth;
-  const itemFullWidth = currentImgSize + 20; // 20 es el padding/margen que usas
-  const containerHeight = itemsGrid.clientHeight; // altura visible, si la tienes fija
+  const itemFullWidth = currentImgSize + 20;
   const itemFullHeight = currentImgSize + 20;
-  const columnsCount = Math.floor(containerWidth / itemFullWidth) || 1; // al menos 1 columna
+  const columnsCount = Math.floor(containerWidth / itemFullWidth) || 1;
+
+  const containerHeight = itemsGrid.clientHeight;
   const sizeMin = 100;
-  const sizeMax = 200;
+  const sizeMax = 190;
   const rowsMin = 2;
   const rowsMax = 5;
-  const m = (rowsMax - rowsMin) / (sizeMax - sizeMin); // = (2-5)/(300-100) = -3/200 = -0.015
-  const b = rowsMin - m * sizeMin; // 5 - (-0.015)*100 = 5 + 1.5 = 6.5
+  const m = (rowsMax - rowsMin) / (sizeMax - sizeMin);
+  const b = rowsMin - m * sizeMin;
   let rowsCount = Math.round(m * currentImgSize + b);
   rowsCount = Math.max(rowsMin, Math.max(rowsMax, rowsCount));
 
   itemsGrid.style.gridTemplateColumns = `repeat(${columnsCount}, ${itemFullWidth}px)`;
   itemsGrid.style.maxHeight = `${rowsCount * itemFullHeight}px`;
   itemsGrid.style.overflowY = 'auto'; // si quieres scroll vertical cuando hay más filas
-  itemsGrid.style.gridTemplateColumns = `repeat(${columnsCount}, ${itemFullWidth}px)`;
 
   filteredItems.forEach(item => {
     const wrapper = document.createElement('div');
     wrapper.className = 'item-wrapper';
     if (item.unique) wrapper.classList.add('unique-item');
-
+    wrapper.classList.add('image-error');
     wrapper.style.width = `${itemFullWidth}px`;
     wrapper.style.height = `${itemFullHeight}px`;
 
@@ -70,33 +72,44 @@ function renderItems() {
     img.className = 'item-image';
     img.style.width = `${currentImgSize}px`;
     img.style.height = `${currentImgSize}px`;
-
+  
     const imgTag = document.createElement('img');
-    imgTag.src = item.imageUrl || 'no-image.png';
+    let hasErrored = false;
+    const defaultImage = 'bread.png';
+    const imageUrl = item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : defaultImage;
+    imgTag.src = imageUrl;
     imgTag.alt = item.label || item.name || 'Ítem';
-    img.appendChild(imgTag);
+  
+    imgTag.onerror = () => {
+      if (!hasErrored) {
+        hasErrored = true;
+        if (!failedImages.has(imgTag.src)) {
+          failedImages.add(imgTag.src);
+          console.warn(`Imagen no encontrada para: ${item.name} (${imgTag.src})`);
+        }
+        imgTag.src = defaultImage;
+      } else {
+        imgTag.onerror = null;
+      }
+    };
+
     imgTag.addEventListener('click', () => {
       fetch(`https://${GetParentResourceName()}/giveItem`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ itemName: item.name })
+      }).catch(err => {
+        console.error(`Error al enviar giveItem para ${item.name}:`, err);
       });
     });
+  
+    img.appendChild(imgTag);
     wrapper.appendChild(img);
 
     const nameDiv = document.createElement('div');
     nameDiv.className = 'item-name';
     nameDiv.textContent = (options.showLabel && item.label) ? item.label :
                           (options.showName && item.name) ? item.name : '';
-
-    nameDiv.addEventListener('click', () => {
-      fetch(`https://${GetParentResourceName()}/giveItem`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ itemName: item.name })
-      });
-    });
-
     wrapper.appendChild(nameDiv);
 
     wrapper.addEventListener('mouseenter', (e) => showTooltip(e, item));

@@ -1,24 +1,3 @@
-
---[[ 
-RegisterNetEvent('rsg-adminmenu:client:giveitem', function(data)
-    local option = {}
-
-    for k, v in pairs(RSGCore.Shared.Items) do
-        local content = { value = v.name, label = v.label }
-        option[#option + 1] = content
-    end
-
-    table.sort(option, compareNames)
-
-    local item = lib.inputDialog(locale('cl_client_132'), {
-        { type = 'select', options = option, label = locale('cl_client_133'), required = true },
-        { type = 'number', label = locale('cl_client_134'), required = true }
-    })
-    if not item then return end
-
-    TriggerServerEvent('rsg-adminmenu:server:giveitem', data.id, item[1], item[2])
-
-end) ]]
 local RSGCore = exports['rsg-core']:GetCoreObject()
 lib.locale()
 
